@@ -1,0 +1,6 @@
+{
+    "version": "1.0",
+    "Water" : [ "rpgTile029" ],
+    "Grass" : [ "rpgTile039","rpgTile040","rpgTile019" ],
+    "Dirt" : [ "rpgTile024" ]
+}
