@@ -1,6 +1,6 @@
 ﻿public enum TileType
 {
+    Grass = 0,
     Water,
-    Grass,
     Dirt
 }

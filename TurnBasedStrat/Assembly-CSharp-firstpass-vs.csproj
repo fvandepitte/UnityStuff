@@ -48,7 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\plugins\SimpleJSON.cs" />
  <Reference Include="ICSharpCode.SharpZipLib">
- <HintPath>C:/Users/fva/Documents/TurnBasedStrat/Assets/plugins/ICSharpCode.SharpZipLib.dll</HintPath>
+ <HintPath>C:/Users/fva/Documents/GitHub/UnityStuff/TurnBasedStrat/Assets/plugins/ICSharpCode.SharpZipLib.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

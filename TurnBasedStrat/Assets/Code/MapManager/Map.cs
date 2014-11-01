@@ -44,34 +44,116 @@ public class Map
         PlacePlayer(obj, new Location { Row = row, Column = column });
     }
 
+    internal enum Direction
+    {
+        Up,
+        Left,
+        Right,
+        Down
+    }
+
     public void GenerateNewRandomMap() {
 
         List<TileType> tiles = new List<TileType>(Count);
-        for (int i = 0; i < Count; i++)
+        
+        TileType[,] map = new TileType[Rows, Columns];
         {
-            if (i < (Count) * 1 / 10 )
+            Direction d;
+            int row = 0, column = 0;
+            //create river
+            if (UnityEngine.Random.Range(0, 1) == 1)
             {
-                tiles.Add(TileType.Water);
-            }
-            else if (i < (Count) * 4 / 10)
-            {
-                tiles.Add(TileType.Dirt);
+                row = UnityEngine.Random.Range(0, Rows - 1);
+                column = 0;
+                d = Direction.Right;
             }
             else
             {
-                tiles.Add(TileType.Grass);
+                row = 0;
+                column = UnityEngine.Random.Range(0, Columns - 1);
+                d = Direction.Up;
             }
+
+            try
+            {
+                for (int i = 0; i < i+1; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        map[row, column] = TileType.Water;
+
+                        i++;
+                        switch (d)
+                        {
+                            case Direction.Up:
+                                row++;
+                                break;
+                            case Direction.Left:
+                                column--;
+                                break;
+                            case Direction.Right:
+                                column++;
+                                break;
+                            case Direction.Down:
+                                row--;
+                                break;
+                        }
+                    }
+
+                    d = SwitchDirection(d);
+                }
+            }
+            catch { }
         }
 
-        tiles.Shuffle();
-        int j = 0;
         for (int row = 0; row < Rows; row++)
         {
             for (int column = 0; column < Columns; column++)
             {
-                _tiles[row, column] = new Tile(row, column, tiles[j++], _root);
+                _tiles[row, column] = new Tile(row, column, map[row, column], _root);
             }
         }
+    }
+
+    private static Direction SwitchDirection(Direction d) {
+        int random = UnityEngine.Random.Range(0, 2);
+        if (random == 0)
+        {
+            switch (d)
+            {
+                case Direction.Up:
+                    d = Direction.Left;
+                    break;
+                case Direction.Left:
+                    d = Direction.Down;
+                    break;
+                case Direction.Right:
+                    d = Direction.Up;
+                    break;
+                case Direction.Down:
+                    d = Direction.Right;
+                    break;
+            }
+        }
+        else if (random == 1)
+        {
+            switch (d)
+            {
+                case Direction.Up:
+                    d = Direction.Right;
+                    break;
+                case Direction.Left:
+                    d = Direction.Up;
+                    break;
+                case Direction.Right:
+                    d = Direction.Down;
+                    break;
+                case Direction.Down:
+                    d = Direction.Left;
+                    break;
+            }
+        }
+        return d;
     }
 
     public int Rows { get; private set; }
