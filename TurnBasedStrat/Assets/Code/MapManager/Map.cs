@@ -34,9 +34,17 @@ public class Map
         {
             throw new IndexOutOfRangeException("Column out of range");
         }
-        _playerLocation[obj] = location;
 
-        obj.SendMessage("SetTarget", _tiles[location.Row, location.Column].Representation.transform.position);
+        if (_tiles[location.Row, location.Column].Walkable)
+        {
+            _playerLocation[obj] = location;
+            obj.SendMessage("SetTarget", _tiles[location.Row, location.Column].Representation.transform.position);
+        }
+        else
+        {
+            PlacePlayer(obj);
+        }
+
     }
 
 
@@ -52,10 +60,7 @@ public class Map
         Down
     }
 
-    public void GenerateNewRandomMap() {
-
-        List<TileType> tiles = new List<TileType>(Count);
-        
+    public void GenerateNewRandomMap() {        
         TileType[,] map = new TileType[Rows, Columns];
         {
             Direction d;
@@ -167,6 +172,22 @@ public class Map
         get 
         {
             return _tiles[row, column];
+        }
+    }
+
+    public Tile this[GameObject representation] {
+        get {
+            for (int row = 0; row < Rows; row++)
+            {
+                for (int column = 0; column < Columns; column++)
+                {
+                    if (_tiles[row, column].Representation == representation) {
+                        return _tiles[row, column];
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

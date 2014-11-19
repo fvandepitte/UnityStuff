@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class MyCharacterController : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class MyCharacterController : MonoBehaviour {
     private Animator _anim;
     private IMovementState _movemenstate = new IdleState();
     private Vector3 _target;
+    private Stack<Vector3> _targetPath;
 
 
     private IMovementState Movementstate {
@@ -41,38 +43,62 @@ public class MyCharacterController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        
 
-        float step = Speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, _target, step);
 
-        if (_target.IsRightOf(transform.position))
+        if (_target != null)
         {
-            Movementstate = new MoveRightState();
+             
+
+
+             float step = Speed * Time.deltaTime;
+             transform.position = Vector3.MoveTowards(transform.position, _target, step);
+
+             if (_target.IsRightOf(transform.position))
+             {
+                 Movementstate = new MoveRightState();
+             }
+             else if (_target.IsLeftOf(transform.position))
+             {
+                 Movementstate = new MoveLeftState();
+             }
+             else if (_target.IsAbove(transform.position))
+             {
+                 Movementstate = new MoveUpState();
+             }
+             else if (_target.IsBeneath(transform.position))
+             {
+                 Movementstate = new MoveDownState();
+             }
+             else
+             {
+                 if (_targetPath != null && _targetPath.Count > 0)
+                 {
+                     Vector3 target = _targetPath.Pop();
+                     _target = new Vector3(target.x, target.y, -0.1f);
+                 }
+                 else
+                 {
+                     Movementstate = new IdleState();
+                 }
+
+             }
         }
-        else if (_target.IsLeftOf(transform.position))
-        {
-            Movementstate = new MoveLeftState();
-        }
-        else if (_target.IsAbove(transform.position))
-        {
-            Movementstate = new MoveUpState();
-        }
-        else if (_target.IsBeneath(transform.position))
-        {
-            Movementstate = new MoveDownState();
-        }
-        else
-        {
-            Movementstate = new IdleState();
-        }
+
+        
 	}
 
     public void MoveInstant() {
         transform.position = _target;
     }
 
-    public void SetTarget(Vector3 target) 
-    {
+    public void SetTarget(Vector3 target) {
         _target = new Vector3(target.x, target.y, -0.1f);
+    }
+
+    public void SetTargetPath(Stack<Vector3> targetPath) 
+    {
+        _targetPath = targetPath;
+       
     }
 }

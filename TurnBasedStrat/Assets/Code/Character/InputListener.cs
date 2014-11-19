@@ -22,7 +22,11 @@ public class InputListener : MonoBehaviour {
 
             if (col.Length > 0)
             {
-                gameObject.SendMessage("SetTarget", col[0].collider2D.gameObject.transform.position);
+                try
+                {
+                    gameObject.GetComponent<FieldController>().SetTarget(col[0].collider2D.gameObject);
+                }
+                catch { }
             }
         }
 	}

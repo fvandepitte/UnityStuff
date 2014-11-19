@@ -17,15 +17,15 @@ public class Engine
     }
 
     private AssetLoader _assetLoader;
-    private Map _map;
+    public Map Map { get; private set; }
 
     public void BootStrap(int rows, int columns, UnityEngine.Transform root = null) {
         _assetLoader = new AssetLoader();
-        _map = new Map(rows, columns, root);
+        Map = new Map(rows, columns, root);
     }
 
     public void LoadBlue(UnityEngine.GameObject blue) {
-        _map.PlacePlayer(blue);
+        Map.PlacePlayer(blue);
     }
     
 
